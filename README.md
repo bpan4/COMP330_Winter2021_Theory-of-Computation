@@ -1,4 +1,4 @@
-# COMP330_Winter2021
+# COMP330 Winter 2021
 
 # Theory of Computation
 
