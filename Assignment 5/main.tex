@@ -1,0 +1,166 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+ \geometry{
+ a4paper,
+ total={170mm,257mm},
+ left=20mm,
+ top=20mm,
+ }
+
+
+\title{ COMP 330 Winter 2021 \\ Assignment 5}
+\author{Belle Pan 260839939}
+\date{25th March 2021}
+
+
+\begin{document}
+
+\maketitle
+
+\noindent \textbf{Solution 1. 
+\\ Consider the two languages \(L_1 = \{a^m b^n c^k d^j | m,n,k,j \geq 0\) and \(m=n\) and \(k=j\)\} and \(L_2 = \{a^m b^n c^k d^j| m,n,k,j \geq 0\) and \(m=k\) and \(n=j\)\}. One of these languages is context-free but the other is not. Identify which is which. For the context-free language give a context-free grammar, and for the other one give a proof using the pumping lemma that is is not context-free.
+}
+\\
+\\
+\(L_1\) is clearly context-free; the following grammar is a clear indication of this:
+\begin{itemize}
+    \item \(S \to MK | \epsilon\)
+    \item \(M \to aMb | \epsilon\)
+    \item \(K \to cNd | \epsilon\)
+\end{itemize}
+\(M\) ensures that the number of \(a\)'s and \(b\)'s are equal (\(m=n\)), and \(K\) ensures that the number of \(c\)'s and \(d\)'s are equal (\(k=j\)). The string terminates as all of the instructions have the option of \(\epsilon\).
+\\
+\\
+\(L_2\), on the other hand, is not context free; below is a proof of this using the pumping lemma in the form of an angel-demon game:
+\begin{itemize}
+    \item The demon chooses a number \(p\).
+    \item The angel chooses a word \(s  = a^p b^p c^p d^p\). 
+    \item The demon needs to divide \(s\) into five parts, denoted \(u, v, w, x, y\) such that \(|vx|>0\) and \(|vwx|\leq p\).
+    \begin{itemize}
+        \item Case 1: \(v\) or \(x\) crosses a boundary between two blocks.
+        \begin{itemize}
+            \item If the angel chooses an integer \(i=2\), the pumped word would have letters out of order (i.e. it could result in a word in the form \(a^e(a^f b^g)^2 b^h c^p d^p\)) and would thus not be in \(L_2\).
+        \end{itemize}
+        \item Case 2: \(v\) contains only \(a\)'s.
+            \begin{itemize}
+                \item \(x\) cannot be in the block containing \(c\)'s, as \(|vwx|<p\). Therefore, if the angel chooses an integer \(i=2\), the pumped word would have more \(a\)'s than \(c\)'s and would thus not be in \(L_2\).
+            \end{itemize}
+        \item Case 3: \(v\) contains only \(b\)'s.
+        \begin{itemize}
+            \item Similarly to Case 2, \(x\) cannot be in the block containing \(d\)'s, as \(|vwx|<p\). Therefore, if the angel chooses an integer \(i=2\), the pumped word would have more \(b\)'s than \(d\)'s, and would thus not be in \(L_2\).
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+Therefore, \(L_2\) must not be context free according to the pumping lemma.
+\\
+\\
+\noindent \textbf{Solution 2. 
+\\Consider the language: \(L=\{a^i b^j c^k | i,j,k \geq 0 \) and \((i \neq j\) or \(j \neq k )\}\). Prove that this language is context-free by giving a grammar but not deterministic context free by showing that its complement is not context-free. The grammar can be rather long to write out fully so it suffices to explain what you are doing and reduce it to similar cases and then say "this case is just like what we have done before." Of course, if you want to write out all the rules you are free to do so. Some of you might find that easier than writing explanations. To prove that the complement is not context free can be done by a reduction argument to a familiar language that is known to be not context free. A direct pumping lemma proof would be painful.}
+
+\newpage
+
+\(L\) is context-free; the following grammar is a clear indication of this:
+\begin{itemize}
+    \item \(S \to WX | YZ \)
+    \item \(W \to A|B_1\)
+    \item \(X \to cX|\epsilon\)
+    \item \(Y \to aY|\epsilon\)
+    \item \(Z \to B_2|C\)
+    \item \(A \to aA|a|T\)
+    \item \(B_1 \to B_1 b|b|Tb\)
+    \item \(B_2 \to bB_2|b|U\)
+    \item \(C \to Cc|c|Uc\)
+    \item \(T \to aTb|\epsilon\)
+    \item \(U \to bUc|\epsilon\)
+\end{itemize}
+In \(S\), we are given two choices: \(WX\) and \(YZ\).
+\begin{itemize}
+    \item \(WX\)
+    \begin{itemize}
+        \item \(W\) ensures that the number of \(a\)'s \(\neq b\)'s, as we are given two choices \(A\) and \(B_1\); these ensure that the number of \(a\)'s is greater than \(b\)'s and that the number of \(a\)'s is less than \(b\)'s respectively.
+        \item \(A\) adds at least one \(a\) to the word before going to \(T\), which adds the same amount of \(a\)'s and \(b\)'s. Thus, there will always be at least one more \(a\) than \(b\)'s in the word produced through this series of decisions.
+        \item Similarly, \(B_1\) adds at least one \(b\) to the word before going to \(T\), which adds the same amount of \(a\)'s and \(b\)'s. Thus, there will always be at least one more \(b\) than \(a\)'s in the word produced through this series of decisions.
+        \item \(X\) adds any number of \(c\)'s to the end of the word.
+    \end{itemize}
+    \item \(YZ\)
+    \begin{itemize}
+        \item \(Y\) adds any number of \(a\)'s to the beginning of the word.
+        \item \(Z\) ensures that the number of \(b\)'s \(\neq c\)'s, as we are given two choices \(B_2\) and \(C\); these ensure that the number of \(b\)'s is greater than \(c\)'s and that the number of \(b\)'s is less than \(c\)'s respectively.
+        \item \(B_2\) adds at least one \(b\) to the word before going to \(U\), which adds the same amount of \(b\)'s and \(c\)'s. Thus, there will always be at least one more \(b\) than \(c\)'s in the word produced through this series of decisions.
+        \item Similarly, \(C\) adds at least one \(C\) to the word before going to \(U\), which adds the same amount of \(b\)'s and \(c\)'s. Thus, there will always be at least one more \(c\) than \(b\)'s in the word produced through this series of decisions.
+    \end{itemize}
+\end{itemize}
+To show that \(L\) is not a deterministic context-free language, we show that the intersection between the complement of \(L\) and a regular language yields a non-context-free language. We use this approach because we know two facts: that deterministic context-free languages are closed under complement, and that the intersection between a context-free language and a regular language yields a context-free language;  using these facts, we can easily determine whether or not the context-free language is deterministic in nature. In this case, ff the complement of \(L\) intersected with a regular language is clearly not context-free, then we know that \(L\) must not be deterministic context-free.
+\begin{itemize}
+    \item We use the regular language \(L' = \{a^l b^m c^n | l,m,n \geq 0\}\) to intersect the complement of \(L\), \(\bar{\mathbb{L}}\).
+    \item \(L \cap \bar{\mathbb{L}} = \{a^n b^n c^n | n\geq 0\}\), which we know is not context-free.
+\end{itemize}
+Hence, we know that \(L\) is context-free, but is not a deterministic context-free language.
+
+\newpage
+
+\noindent \textbf{Solution 3. 
+\\Suppose we have a language \(L\) defined over the alphabet \(\{a, b, c\}\) and suppose that \(L\) is context-free. We define a new language \(perm(L)\) to be the set of all permutations of all words in \(L\). For example, if \(L=\{abc , aab\}\), then \(perm(L) = \{abc, acb, bac, bca, cab, cba, aab ,aba, baa\}\). Show that \(perm(L)\) need not be context-free by giving an example of a language \(L\) that is context-free but where \(perm(L)\) is not context-free. You need not give a pumping lemma proof if your example is just like one we have seen in class.
+}
+\\
+\\First, let me admit that I truly would like to avoid using the pumping lemma for the sake of conserving my brain cells. Given this goal, I want \(perm(L)\) to be in the form \(a^n b^n c^n\), \(n \geq 0\) which we have seen time and time again is not context-free; however, this is not possible as \(perm(L)\) is a set of all permutations of words in \(L\). Therefore, we must work with context-free language closure properties: by context-free language closure properties, the intersection between a regular language and \(perm(L)\) would be context-free IF \(perm(L)\) is context-free. It is clear now that I must make a language \(L\) that will give a certain permutation \(a^n b^n c^n \in perm(L)\), and then find the intersection between \(perm(L)\) and the language \(\{a^l b^m c^n | l,m,n \geq 0\}\) to yield the language \(\{a^n b^n b^n | n \geq 0\}\) which we know is not context-free.
+
+\begin{itemize}
+    \item Let \(L=\{(abc)^n | n \geq 0\}\), which yields \(perm(L) = \{a^n b^n c^n, a^{n-1}b^n c^n a, a^{n-1} b^{n-1} c^{n} ab, ... | n \geq 0\}\).
+    \item Let \(L_2 = \{a^l b^m c^n | l,m,n \geq 0\}\). We know that this is a regular language.
+    \item By context-free language closure properties, if \(perm(L)\) is context-free, then \(perm(L)\cap L_2\) must yield a context-free language.
+    \item However, \(perm(L)\cap L_2 = \{a^n b^n b^n | n \geq 0\}\), which we know is not context-free.
+\end{itemize}
+\\Therefore, \(perm(L)\) may not necessarily be a context-free language for every language \(L\).
+\\
+\\
+\\
+\noindent \textbf{Solution 4. 
+\\We have seen in class that the language \(L_1 = \{a^{i+j}b^{j+k}c^{k+i} | i,j,k \geq 0\}\) over the alphabet \(\{a,b,c\}\) is context-free. Consider the language \(L_2 = \{a^{i+j} b^{j+k} c^{k+l} d^{i+l} | i,j,k,l \geq 0\}\) over the alphabet \(\{a,b,c,d\}\). Is this language also context-free? If so, give a context-free grammar for it; if not, prove that it is not context-free using the pumping lemma.
+}
+\\
+\\The following is a grammar for \(L_2\):
+\begin{itemize}
+    \item \(S \to I | JKL\)
+    \item \(I \to aSd | \epsilon\)
+    \item \(J \to aJb | \epsilon\)
+    \item \(K \to bKc | \epsilon\)
+    \item \(L \to cLd | \epsilon\)
+\end{itemize}
+\\To explain this grammar, let us first rewrite the language \(L_2\) as \(\{a^i (a^j b^j) (b^k c^k) (c^l d^l) d^i | i,j,k,l \geq 0\}\).
+\\In \(S\), we are given two choices: \(I\) and \(JKL\).
+\begin{itemize}
+    \item \(I\) ensures that the number of \(a\)'s and \(d\)'s at the beginning and end of the word are equal, generating the parts \(a^i\) and \(d^i\). \(I\) returns us to \(S\), which allows us to choose to either continue increasing the number of \(a\)'s and \(d\)'s at the beginning and end of the word, or to begin generating the \((a^j b^j) (b^k c^k) (c^l d^l)\) part of the word. \(I\) also gives us the option of terminating, as it has the option of \(\epsilon\); using this option generates words of the form \(a^i d^i\) where \(i \geq 0\).
+    \item \(JKL\) ensures the generation of the \((a^j b^j) (b^k c^k) (c^l d^l)\) portion of the word: \(J\) generates an equal number of \(a\)'s and \(b\)'s which makes up the \((a^j b^j)\) section, \(K\) generates an equal number of \(b\)'s and \(c\)'s which makes up the \((b^k c^k)\) section, and \(L\) generates an equal number of \(b\)'s and \(c\)'s which makes up the \((c^l d^l)\) section of the word. The word terminates because \(J\), \(K\) and \(L\) all give the option of \(\epsilon\); in addition, having \(\epsilon\) as an option ensures that \(j, k, l\) can equal \(0\) or be larger than \(0\).
+\end{itemize}
+
+\newpage
+
+\noindent \textbf{Solution 5. 
+\\Prove that the complement of the set of palindromes is context-free: this is the set of words \(\{w \in \Sigma ^*|w \neq w^{rev}\}\). You do not have to give a formal proof but you must explain your answer.
+}
+\\
+\\The complement of the set of palindromes is clearly context-free. For example, take the language \(\{w \in \Sigma ^*|w \neq w^{rev}\}\) with \(\Sigma = \{a, b\}\), which we can explicitly design a grammar to recognize:
+\begin{itemize}
+    \item \(S \to aSa | bSb | aDb | bDa\)
+    \item \(D \to aD | bD | \epsilon\)
+\end{itemize}
+\(S\) provides us with four choices:
+\begin{itemize}
+    \item \(aSa\) and \(bSb\) both generate the same character at the beginning and end of the string. It is not possible to terminate the string using only the options \(aSa\) and \(bSb\), so eventually we will need to choose \(aDb\) or \(bDa\).
+    \item \(aDb\) and \(bDa\) ensure that there is at least one mismatched pair in the string. Then, \(D\) generates any number of \(a\)'s and \(b\)'s in any order and ensures that all non-palindrome strings can be generated by this grammar. \(D\) also ensures that the string terminates as it has \(\epsilon\) as an option.
+\end{itemize}
+To be more general about this problem and proving that the set of ALL non-palindromes (unlike the above, which addresses only non-palindromes with letters \(a\) and \(b\)), we may consider using a non-deterministic Pushdown Automata (PDA) described below:
+\begin{itemize}
+    \item The machine reads each character in the string and pushes it onto the stack until it reaches the middle of the word.
+    \item The PDA somehow recognizes that it has reached the middle of the word and starts popping symbols off the stack if it matches with the character it reads from the string.
+    \item If the PDA reads a mismatching symbol, then the PDA recognizes that the word is NOT a palindrome and accepts.
+    \item If the stack is empty at the end of execution, the PDA rejects the string.
+\end{itemize}
+As a PDA can be designed to recognize the complement of the set of palindromes, we know that it must be context-free.
+
+
+
+
+\end{document}
