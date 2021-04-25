@@ -1,6 +1,4 @@
-# COMP330 Winter 2021
-
-# Theory of Computation
+# COMP330 Winter 2021 Theory of Computation
 
 ## Instructor : Prakash Panangaden
 
